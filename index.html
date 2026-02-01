@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simple SVG Drawing</title>
+<style>
+body {
+    font-family: 'Times New Roman';
+    padding: 40px;
+}
+#box {
+    border: 2px solid blue;
+    background: white;
+    cursor: crosshair;
+}
+</style>
+</head>
+<body>
+<h2>SVG (play with mouse and make any design)</h2>
+<svg id="box" width="700" height="400"></svg>
+<script>
+let box = document.getElementById("box");
+let drawing = false;   
+let linePath = "";     
+let pathElement = null;
+box.addEventListener("mousedown", function(event) {
+    drawing = true;
+    let boxPosition = box.getBoundingClientRect();
+    let x = event.clientX - boxPosition.left;
+    let y = event.clientY - boxPosition.top;
+
+    pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    linePath = "M " + x + " " + y;
+    pathElement.setAttribute("d", linePath);
+    pathElement.setAttribute("stroke", "black");
+    pathElement.setAttribute("stroke-width", "2");
+    pathElement.setAttribute("fill", "none");
+
+    box.appendChild(pathElement);
+});
+box.addEventListener("mousemove", function(event) {
+
+    if (drawing === false) return;
+
+    let boxPosition = box.getBoundingClientRect();
+    let x = event.clientX - boxPosition.left;
+    let y = event.clientY - boxPosition.top;
+    linePath = linePath + " L " + x + " " + y;
+    pathElement.setAttribute("d", linePath);
+});
+box.addEventListener("mouseup", function() {
+    drawing = false;
+});
+box.addEventListener("mouseleave", function() {
+    drawing = false;
+});
+</script>
+</body>
+</html>
